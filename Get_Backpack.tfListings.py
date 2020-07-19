@@ -2,8 +2,6 @@ from bs4 import BeautifulSoup
 import requests
 from concurrent.futures import ThreadPoolExecutor
 import asyncio
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 import csv
 
 def GetListings(url: str, session,fs,fb):
@@ -72,20 +70,14 @@ async def GetListings_async(urls: list,fs,fb)->list:
 			for response in await asyncio.gather(*tasks):
 				res.append(response)
 	return res
-# Marketplace.tf Graph Parsing
-# def Graph_parsing(url):
-	
+
+
 #  MAIN
 if __name__ == "__main__":
 	urls=list()
 	with open('links.csv', 'r',encoding='utf8',errors='ignore') as file:
 	    for line in file.readlines():
 	    	urls.append(line)
-	fs = open("seller" + ".csv", "w",encoding='utf-8')
-	fs.truncate()
-
-	fb = open("buyer" + ".csv", "w",encoding='utf-8')
-	fs.truncate()
 	loop= asyncio.get_event_loop()
 	future=asyncio.ensure_future(GetListings_async(urls,fs,fb))
 	res=loop.run_until_complete(future)
